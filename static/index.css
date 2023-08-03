@@ -1,0 +1,142 @@
+/* index.css */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 20px; /* Add margin for the entire body */
+  padding: 0;
+  width: 800px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 36px;
+  color: #007bff; /* Add color for h1 */
+}
+
+h2 {
+  margin-top: 30px;
+  font-size: 24px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+li:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a stronger shadow on hover */
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+  transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+  color: #0056b3;
+}
+
+.add-btn {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.add-btn a {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.add-btn a:hover {
+  background-color: #0056b3;
+}
+
+/* Add animation for the edit and delete icons */
+li a i {
+  font-size: 20px;
+  margin-left: 10px;
+  transform: scale(1);
+  transition: transform 0.2s ease-in-out;
+}
+
+li a i:hover {
+  transform: scale(1.2);
+  color: #0056b3;
+}
+
+/* Center the entire content */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tasks-container {
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Customize the column appearance */
+.tasks-container h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+/* Customize the card appearance */
+.tasks-container li {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.tasks-container li:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Add animation for the task list */
+.tasks-container ul {
+  animation: fadeInUp 0.5s forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Position the edit and delete icons at the bottom of the card */
+li div {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 1;
+}
+
+li div a {
+  margin-left: 10px;
+}

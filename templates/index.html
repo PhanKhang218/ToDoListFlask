@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MY TODO APP</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='index.css') }}"
+    />
+  </head>
+  <body>
+    <h1>MY TODO APP</h1>
+    <h2>Tasks:</h2>
+    <ul>
+      {% for task in tasks %}
+      <li>
+        {{ task[1] }} ({{ task[2] }})
+        <div>
+          <a href="{{ url_for('edit', task_id=task[0]) }}">
+            <i class="fas fa-edit"></i>
+          </a>
+          <a href="{{ url_for('delete', task_id=task[0]) }}">
+            <i class="fas fa-trash"></i>
+          </a>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="add-btn">
+      <a href="{{ url_for('add') }}">Add New Task</a>
+    </div>
+  </body>
+</html>

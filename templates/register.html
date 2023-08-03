@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Đăng ký</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Đăng ký</h1>
+      <div class="message">
+        {% with messages = get_flashed_messages() %} {% if messages %}
+        <ul>
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %} {% endwith %}
+      </div>
+      <form method="post" action="/register">
+        <div class="form-group">
+          <label for="username">Tên đăng nhập:</label>
+          <input type="text" name="username" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Mật khẩu:</label>
+          <input type="password" name="password" required />
+        </div>
+        <button type="submit" class="btn-primary">Đăng ký</button>
+      </form>
+      <p>
+        Nếu bạn đã có tài khoản, vui lòng
+        <a href="/login">đăng nhập</a>.
+      </p>
+    </div>
+  </body>
+</html>
