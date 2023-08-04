@@ -12,25 +12,34 @@
     />
   </head>
   <body>
-    <h1>MY TODO APP</h1>
-    <h2>Tasks:</h2>
-    <ul>
-      {% for task in tasks %}
-      <li>
-        {{ task[1] }} ({{ task[2] }})
-        <div>
-          <a href="{{ url_for('edit', task_id=task[0]) }}">
-            <i class="fas fa-edit"></i>
-          </a>
-          <a href="{{ url_for('delete', task_id=task[0]) }}">
-            <i class="fas fa-trash"></i>
-          </a>
+    <div>
+      <div class="container">
+        <h1>MY TODO APP</h1>
+        <div class="tasks-container">
+          <h2>Tasks:</h2>
+          <ul>
+            {% for task in tasks %}
+            <li>
+              {{ task[1] }} ({{ task[2] }})
+              <div>
+                <a href="{{ url_for('edit', task_id=task[0]) }}">
+                  <i class="fas fa-edit"></i>
+                </a>
+                <a href="{{ url_for('delete', task_id=task[0]) }}">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+          <div class="add-btn">
+            <a href="{{ url_for('add') }}">Add New Task</a>
+          </div>
+          <div class="logout-btn">
+            <a href="{{ url_for('logout') }}">Logout</a>
+          </div>
         </div>
-      </li>
-      {% endfor %}
-    </ul>
-    <div class="add-btn">
-      <a href="{{ url_for('add') }}">Add New Task</a>
+      </div>
     </div>
   </body>
 </html>

@@ -3,7 +3,6 @@ import sqlite3
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import os
-
 app = Flask(__name__)
 app.secret_key = 'aaaa'  
 
@@ -38,12 +37,13 @@ def create_tables():
         )
     ''')
 
-    # Tạo bảng tasks nếu chưa tồn tại
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS tasks (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             task_name TEXT NOT NULL,
-            status TEXT NOT NULL
+            status TEXT NOT NULL,
+            user_id INTEGER, -- Thêm cột user_id vào bảng tasks
+            FOREIGN KEY (user_id) REFERENCES users (id)
         )
     ''')
 
@@ -123,7 +123,7 @@ def index():
     cursor = conn.cursor()
 
     # Lấy danh sách công việc từ cơ sở dữ liệu
-    cursor.execute('SELECT * FROM tasks')
+    cursor.execute('SELECT * FROM tasks WHERE user_id = ?', (current_user.id,))
     tasks = cursor.fetchall()
 
     # Đóng kết nối cơ sở dữ liệu
@@ -143,7 +143,8 @@ def add():
         cursor = conn.cursor()
 
         # Thêm công việc vào cơ sở dữ liệu
-        cursor.execute('INSERT INTO tasks (task_name, status) VALUES (?, ?)', (task_name, status))
+        cursor.execute('INSERT INTO tasks (task_name, status, user_id) VALUES (?, ?, ?)',
+                       (task_name, status, current_user.id))
         conn.commit()
 
         # Đóng kết nối cơ sở dữ liệu

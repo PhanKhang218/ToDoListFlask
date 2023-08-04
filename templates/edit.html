@@ -5,22 +5,26 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='edit.css') }}">
 </head>
 <body>
-    <h1>Edit Task</h1>
-    <form method="post" action="{{ url_for('edit', task_id=task[0]) }}">
-        <label for="task_name">Task Name:</label>
-        <input type="text" name="task_name" id="task_name" value="{{ task[1] }}" required>
-        <br>
-        <label for="status">Status:</label>
-        <select name="status" id="status" required>
-            <option value="To Do" {% if task[2] == 'To Do' %}selected{% endif %}>To Do</option>
-            <option value="In Progress" {% if task[2] == 'In Progress' %}selected{% endif %}>In Progress</option>
-            <option value="Done" {% if task[2] == 'Done' %}selected{% endif %}>Done</option>
-        </select>
-        <br>
-        <div class="btn-center">
-            <button type="submit">Save Changes</button>
-            <button><a href="{{ url_for('index') }}">Cancel</a></button>
-          </div>
-    </form>
+    <div>
+        <div class="container">
+            <h1>Edit Task</h1>
+            <form method="post" action="{{ url_for('edit', task_id=task[0]) }}">
+                <label for="task_name">Task Name:</label>
+                <input type="text" name="task_name" id="task_name" value="{{ task[1] }}" required>
+                <br>
+                <label for="status">Status:</label>
+                <select name="status" id="status" required>
+                    <option value="To Do" {% if task[2] == 'To Do' %}selected{% endif %}>To Do</option>
+                    <option value="In Progress" {% if task[2] == 'In Progress' %}selected{% endif %}>In Progress</option>
+                    <option value="Done" {% if task[2] == 'Done' %}selected{% endif %}>Done</option>
+                </select>
+                <br>
+                <div class="btn-center">
+                    <button type="submit">Save Changes</button>
+                    <button><a href="{{ url_for('index') }}">Cancel</a></button>
+                  </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
