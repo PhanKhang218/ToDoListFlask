@@ -28,7 +28,6 @@ def create_tables():
     conn = connect_db()
     cursor = conn.cursor()
 
-    # Tạo bảng users nếu chưa tồn tại
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,14 +37,15 @@ def create_tables():
     ''')
 
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS tasks (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            task_name TEXT NOT NULL,
-            status TEXT NOT NULL,
-            user_id INTEGER, -- Thêm cột user_id vào bảng tasks
-            FOREIGN KEY (user_id) REFERENCES users (id)
-        )
-    ''')
+    CREATE TABLE IF NOT EXISTS tasks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        task_name TEXT NOT NULL,
+        status TEXT NOT NULL,
+        category TEXT,  
+        user_id INTEGER, 
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    )
+''')
 
     conn.commit()
     conn.close()
@@ -59,7 +59,6 @@ def register():
         conn = connect_db()
         cursor = conn.cursor()
 
-        # Kiểm tra xem tên đăng nhập đã tồn tại chưa
         cursor.execute('SELECT id FROM users WHERE username = ?', (username,))
         existing_user = cursor.fetchone()
 
@@ -68,10 +67,8 @@ def register():
             conn.close()
             return redirect(url_for('register'))
 
-        # Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-        # Thêm người dùng mới vào cơ sở dữ liệu
         cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, hashed_password))
         conn.commit()
         conn.close()
@@ -119,17 +116,39 @@ def logout():
 @app.route('/')
 @login_required
 def index():
+    keyword = request.args.get('keyword')
+    category = request.args.get('category')
+    status = request.args.get('status')
+
     conn = connect_db()
     cursor = conn.cursor()
 
-    # Lấy danh sách công việc từ cơ sở dữ liệu
-    cursor.execute('SELECT * FROM tasks WHERE user_id = ?', (current_user.id,))
+    query = 'SELECT * FROM tasks WHERE user_id = ?'
+    params = (current_user.id,)
+
+    if keyword:
+        query += ' AND task_name LIKE ?'
+        params += ('%' + keyword + '%',)
+
+    if category and category != "None":  # Thêm điều kiện kiểm tra category có giá trị None hay không
+        query += ' AND category = ?'
+        params += (category,)
+
+    if status:
+        query += ' AND status = ?'
+        params += (status,)
+
+    cursor.execute(query, params)
     tasks = cursor.fetchall()
 
-    # Đóng kết nối cơ sở dữ liệu
+    cursor.execute('SELECT DISTINCT category FROM tasks WHERE user_id = ?', (current_user.id,))
+    categories = cursor.fetchall()
+
     conn.close()
 
-    return render_template('index.html', tasks=tasks)
+    return render_template('index.html', tasks=tasks, categories=categories)
+
+
 
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -138,16 +157,15 @@ def add():
     if request.method == 'POST':
         task_name = request.form['task_name']
         status = request.form['status']
+        category = request.form.get('category')  
 
         conn = connect_db()
         cursor = conn.cursor()
 
-        # Thêm công việc vào cơ sở dữ liệu
-        cursor.execute('INSERT INTO tasks (task_name, status, user_id) VALUES (?, ?, ?)',
-                       (task_name, status, current_user.id))
+        cursor.execute('INSERT INTO tasks (task_name, status, category, user_id) VALUES (?, ?, ?, ?)',
+                       (task_name, status, category, current_user.id))
         conn.commit()
 
-        # Đóng kết nối cơ sở dữ liệu
         conn.close()
 
         return redirect(url_for('index'))
@@ -165,11 +183,9 @@ def edit(task_id):
         conn = connect_db()
         cursor = conn.cursor()
 
-        # Cập nhật thông tin công việc trong cơ sở dữ liệu
         cursor.execute('UPDATE tasks SET task_name = ?, status = ? WHERE id = ?', (task_name, status, task_id))
         conn.commit()
 
-        # Đóng kết nối cơ sở dữ liệu
         conn.close()
 
         return redirect(url_for('index'))
@@ -181,7 +197,6 @@ def edit(task_id):
         cursor.execute('SELECT * FROM tasks WHERE id = ?', (task_id,))
         task = cursor.fetchone()
 
-        # Đóng kết nối cơ sở dữ liệu
         conn.close()
 
         return render_template('edit.html', task=task)
@@ -197,18 +212,15 @@ def delete(task_id):
     cursor.execute('DELETE FROM tasks WHERE id = ?', (task_id,))
     conn.commit()
 
-    # Đóng kết nối cơ sở dữ liệu
     conn.close()
 
     return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
-    # Kiểm tra và tạo thư mục lưu trữ CSDL nếu chưa tồn tại
     if not os.path.exists('database'):
         os.makedirs('database')
 
-    # Tạo bảng users và tasks nếu chưa tồn tại
     create_tables()
 
     app.run(debug=True)

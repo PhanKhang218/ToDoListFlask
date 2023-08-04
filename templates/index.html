@@ -35,6 +35,21 @@
           <div class="add-btn">
             <a href="{{ url_for('add') }}">Add New Task</a>
           </div>
+
+          <form
+            method="get"
+            action="{{ url_for('index') }}"
+            class="search-form"
+          >
+            <input type="text" name="keyword" placeholder="Từ khóa tìm kiếm" />
+            <select name="category">
+              <option value="">Tất cả danh mục</option>
+              {% for category in categories %}
+              <option value="{{ category[0] }}">{{ category[0] }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit">Tìm kiếm và lọc</button>
+          </form>
           <div class="logout-btn">
             <a href="{{ url_for('logout') }}">Logout</a>
           </div>

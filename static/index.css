@@ -150,7 +150,7 @@ li div a {
 
 .logout-btn {
   text-align: center;
-  margin-top: 220px;
+  margin-top: 20px;
 }
 
 .logout-btn a {
@@ -165,4 +165,47 @@ li div a {
 
 .logout-btn a:hover {
   background-color: #c82333;
+}
+
+.search-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  margin-top: 100px;
+}
+
+.search-form input,
+.search-form select {
+  padding: 8px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-form button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.search-form button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 480px) {
+  .search-form {
+    flex-direction: column;
+  }
 }
